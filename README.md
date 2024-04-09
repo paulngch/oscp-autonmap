@@ -11,4 +11,4 @@ Command execution:
 
 # Usage
 
-sudo bash ~/<path-to-script>/autonmap-nc.sh <RHOST> ./<path-for-output>
+sudo bash ~/{path-to-script}/autonmap-nc.sh {RHOST} ./{path-for-output}
