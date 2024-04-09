@@ -9,6 +9,9 @@ Command execution:
 5. Run "echo version | sudo nc -q 30 <IP> <PORT>" on each of the open ports
 6. Appends results (less rust-scan) into file
 
+# Requirements
+Rustscan
+
 # Usage
 
 sudo bash ~/{path-to-script}/autonmap-nc.sh {RHOST} ./{path-for-output}
