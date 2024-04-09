@@ -15,3 +15,5 @@ Rustscan
 # Usage
 
 sudo bash ~/{path-to-script}/autonmap-nc.sh {RHOST} ./{path-for-output}
+
+![](https://github.com/paulngch/oscp-autonmap/blob/main/short-clip.gif)
