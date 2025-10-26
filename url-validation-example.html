@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Validation Pattern Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #007bff;
+        }
+        .result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .match {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .no-match {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .current-url {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .test-url {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>URL Validation Pattern Tester</h1>
+        
+        <div class="current-url">
+            <strong>Current URL:</strong> <span id="currentUrl"></span><br>
+            <strong>Test Result:</strong> <span id="currentResult"></span>
+        </div>
+
+        <h2>The Regex Pattern</h2>
+        <code>/^http:\/\/(?:localhost|\d{1,3}(\.\d{1,3}){3}):\d+\/?#?\//.test(window.location.href)</code>
+
+        <h2>Test Cases</h2>
+        <div id="testResults"></div>
+
+        <div class="explanation">
+            <h3>What This Pattern Tests:</h3>
+            <ul>
+                <li><strong>Protocol:</strong> Must be HTTP (not HTTPS)</li>
+                <li><strong>Host:</strong> Must be either "localhost" or an IP address (XXX.XXX.XXX.XXX)</li>
+                <li><strong>Port:</strong> Must have a port number (e.g., :8080, :3000)</li>
+                <li><strong>Path:</strong> Must end with <code>/#/</code> or <code>//</code> or <code>/</code></li>
+            </ul>
+            <p><strong>Common use case:</strong> Detecting if a web app is running in local development mode.</p>
+            <p>See <code>URL_VALIDATION_PATTERN.md</code> for detailed explanation.</p>
+        </div>
+    </div>
+
+    <script>
+        // The regex pattern from the problem statement
+        const urlPattern = /^http:\/\/(?:localhost|\d{1,3}(\.\d{1,3}){3}):\d+\/?#?\//.test(window.location.href);
+        
+        // Display current URL and test result
+        document.getElementById('currentUrl').textContent = window.location.href;
+        document.getElementById('currentResult').innerHTML = urlPattern 
+            ? '<span class="match">✅ MATCHES</span>' 
+            : '<span class="no-match">❌ DOES NOT MATCH</span>';
+
+        // Test URLs
+        const testUrls = [
+            { url: 'http://localhost:8080/#/', expected: true },
+            { url: 'http://localhost:3000/#/', expected: true },
+            { url: 'http://127.0.0.1:8080/#/', expected: true },
+            { url: 'http://192.168.1.100:3000/#/', expected: true },
+            { url: 'http://10.0.0.1:8080/', expected: true },
+            { url: 'http://localhost:8080//', expected: true },
+            { url: 'https://localhost:8080/#/', expected: false },
+            { url: 'http://localhost:8080', expected: false },
+            { url: 'http://localhost/#/', expected: false },
+            { url: 'http://example.com:8080/#/', expected: false },
+            { url: 'http://localhost:8080/home', expected: false },
+            { url: 'http://999.999.999.999:8080/#/', expected: true, note: 'Invalid IP but still matches!' },
+        ];
+
+        // Run tests
+        const testResults = document.getElementById('testResults');
+        testUrls.forEach(test => {
+            const regex = /^http:\/\/(?:localhost|\d{1,3}(\.\d{1,3}){3}):\d+\/?#?\//;
+            const matches = regex.test(test.url);
+            const isCorrect = matches === test.expected;
+            
+            const resultDiv = document.createElement('div');
+            resultDiv.className = 'test-section';
+            resultDiv.innerHTML = `
+                <div class="test-url">${test.url}</div>
+                <div class="result ${matches ? 'match' : 'no-match'}">
+                    ${matches ? '✅ MATCHES' : '❌ DOES NOT MATCH'}
+                    ${!isCorrect ? ' <strong>(UNEXPECTED RESULT!)</strong>' : ''}
+                    ${test.note ? '<br><em>' + test.note + '</em>' : ''}
+                </div>
+            `;
+            testResults.appendChild(resultDiv);
+        });
+    </script>
+</body>
+</html>
