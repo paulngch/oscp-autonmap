@@ -71,7 +71,12 @@ https://localhost:8080/#/         (HTTPS instead of HTTP)
 http://localhost:8080             (missing the required final slash)
 http://example.com:8080/#/        (domain name, not localhost or IP)
 http://localhost/#/               (missing port number)
-http://999.999.999.999:8080/#/    (WILL MATCH - invalid IP but pattern doesn't validate octets!)
+```
+
+### ⚠️ Pattern Limitation Example:
+
+```
+http://999.999.999.999:8080/#/    (WILL MATCH despite invalid IP octets >255!)
 ```
 
 ## Important Notes and Potential Issues
@@ -115,11 +120,15 @@ If you want to properly validate localhost URLs, consider these improved version
 
 ### For Hash-Based Routing (SPA)
 ```javascript
-// More precise pattern with end anchor for hash routing
+// Simple and readable - only localhost
 /^http:\/\/(localhost|127\.0\.0\.1):\d+\/#\//.test(window.location.href)
 
-// Or with proper IP validation
-/^http:\/\/(localhost|127\.0\.0\.1|(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)):\d+\/#\/$/.test(window.location.href)
+// With comprehensive IP validation (more complex but accurate)
+// Validates octets are in 0-255 range
+const ipOctet = '(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
+const ipPattern = `(?:${ipOctet}\\.){3}${ipOctet}`;
+const pattern = new RegExp(`^http:\\/\\/(localhost|127\\.0\\.0\\.1|${ipPattern}):\\d+\\/#\\/$`);
+pattern.test(window.location.href);
 ```
 
 ### For General Local Development Detection

@@ -103,9 +103,18 @@
         
         // Display current URL and test result
         document.getElementById('currentUrl').textContent = window.location.href;
-        document.getElementById('currentResult').innerHTML = urlPattern 
-            ? '<span class="match">✅ MATCHES</span>' 
-            : '<span class="no-match">❌ DOES NOT MATCH</span>';
+        const resultElement = document.getElementById('currentResult');
+        if (urlPattern) {
+            const matchSpan = document.createElement('span');
+            matchSpan.className = 'match';
+            matchSpan.textContent = '✅ MATCHES';
+            resultElement.appendChild(matchSpan);
+        } else {
+            const noMatchSpan = document.createElement('span');
+            noMatchSpan.className = 'no-match';
+            noMatchSpan.textContent = '❌ DOES NOT MATCH';
+            resultElement.appendChild(noMatchSpan);
+        }
 
         // Test URLs
         const testUrls = [

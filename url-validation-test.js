@@ -61,7 +61,7 @@ function runTests() {
                 { url: 'http://10.0.0.1:8080/', description: 'IP with single trailing slash' },
                 { url: 'http://localhost:8080//', description: 'localhost with double slash' },
                 { url: 'http://172.16.0.1:9000/#/', description: 'another private IP range' },
-                { url: 'http://999.999.999.999:8080/#/', description: 'invalid IP (but matches pattern!)' },
+                { url: 'http://999.999.999.999:8080/#/', description: 'invalid IP octets >255 (demonstrates weak IP validation)' },
             ]
         },
         // Expected NOT to match
